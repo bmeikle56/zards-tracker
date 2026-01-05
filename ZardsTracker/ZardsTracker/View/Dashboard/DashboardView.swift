@@ -9,22 +9,14 @@ import SwiftUI
 import UIKit
 
 @ViewBuilder
-func view(for screen: String) -> some View {
-    switch screen {
-    case "Stats": StatsGraphic()
-    case "Draft": DraftGraphic()
-    case "Media": MediaGraphic()
-    case "Money": MoneyGraphic()
-    default: StatsGraphic()
+func view(for destination: Destination) -> some View {
+    switch destination {
+    case .stats: StatsGraphic()
+    case .draft: DraftGraphic()
+    case .media: MediaGraphic()
+    case .money: MoneyGraphic()
     }
 }
-
-let screens: [String] = [
-    "Stats",
-    "Draft",
-    "Media",
-    "Money"
-]
 
 struct MoneyGraphic: View {
     var body: some View {
@@ -289,15 +281,15 @@ struct DashboardView: View {
                 }
                 Spacer()
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(screens, id: \.self) { screen in
+                    ForEach(Destination.allCases, id: \.self) { destination in
                         Button(action: {
-                            path.append(Destination.playerStats)
+                            path.append(destination)
                         }, label: {
                             VStack {
-                                view(for: screen)
+                                view(for: destination)
                                     .frame(height: 120)
                                 Spacer().frame(height: 20)
-                                Text("< \(screen) >")
+                                Text("< \(String(describing: destination)) >")
                                     .font(.system(.body, design: .monospaced))
                                     .foregroundColor(.gray)
                                     .padding()
@@ -320,8 +312,10 @@ struct DashboardView: View {
         }
         .navigationDestination(for: Destination.self) {
             switch $0 {
-            case .playerStats:
-                PlayerStatsView()
+            case .stats: StatsView()
+            case .money: MoneyView()
+            case .media: MediaView()
+            case .draft: DraftView()
             }
         }
     }

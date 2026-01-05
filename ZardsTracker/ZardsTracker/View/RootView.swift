@@ -10,17 +10,11 @@ import SwiftUI
 struct RootView: View {
     @State private var path = NavigationPath()
     
-    @StateObject var viewModel = ZardsViewModel()
+    //@StateObject var viewModel = ZardsViewModel()
 
     var body: some View {
         NavigationStack(path: $path) {
             DashboardView(path: $path)
-            .navigationDestination(for: Destination.self) { destination in
-                switch destination {
-                case .playerStats:
-                    PlayerStatsView()
-                }
-            }
         }
     }
 }
