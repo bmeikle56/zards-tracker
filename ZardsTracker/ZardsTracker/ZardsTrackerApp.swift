@@ -9,11 +9,9 @@ import SwiftUI
 
 @main
 struct ZardsTrackerApp: App {
-    @StateObject var viewModel = ZardsViewModel()
-
     var body: some Scene {
         WindowGroup {
-            DashboardView()
+            RootView()
         }
     }
 }

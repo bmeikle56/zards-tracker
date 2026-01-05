@@ -82,7 +82,7 @@ let playerData: [WizardsPlayerData] = [
 //    DashboardView(viewModel: ZardsViewModel())
 //}
 
-struct PlayerStatsView: View {
+struct StatsView: View {
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -113,5 +113,5 @@ struct PlayerStatsView: View {
 }
 
 #Preview {
-    PlayerStatsView()
+    StatsView()
 }

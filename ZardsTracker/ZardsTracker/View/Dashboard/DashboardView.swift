@@ -6,24 +6,17 @@
 //
 
 import SwiftUI
+import UIKit
 
 @ViewBuilder
-func view(for screen: String) -> some View {
-    switch screen {
-    case "Stats": StatsGraphic()
-    case "Draft": DraftGraphic()
-    case "Media": MediaGraphic()
-    case "Money": MoneyGraphic()
-    default: StatsGraphic()
+func view(for destination: Destination) -> some View {
+    switch destination {
+    case .stats: StatsGraphic()
+    case .draft: DraftGraphic()
+    case .media: MediaGraphic()
+    case .money: MoneyGraphic()
     }
 }
-
-let screens: [String] = [
-    "Stats",
-    "Draft",
-    "Media",
-    "Money"
-]
 
 struct MoneyGraphic: View {
     var body: some View {
@@ -250,11 +243,18 @@ struct MonumentGraphic: View {
     }
 }
 
+// gold:
+//RoundedRectangle(cornerRadius: 2)
+//    .fill(Color(cgColor: CGColor(red: 183/255, green: 135/255, blue: 0/255, alpha: 0.8)))
+//    .frame(width: 80, height: 2)
+
 struct DashboardView: View {
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+
+    @Binding var path: NavigationPath
     
     var body: some View {
         ZStack {
@@ -262,30 +262,44 @@ struct DashboardView: View {
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                HStack {
+                HStack(spacing: 30) {
                     MonumentGraphic()
-                    Text("ZardsTracker")
-                        .font(.system(.body, design: .monospaced))
-                        .foregroundColor(.gray)
+                    VStack(alignment: .leading) {
+                        Text("Zards Tracker")
+                            .font(.system(.body, design: .monospaced, weight: .heavy))
+                            .foregroundColor(.gray)
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.red.opacity(0.8))
+                                .frame(width: 120, height: 2)
+                        RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.blue.opacity(0.8))
+                                .frame(width: 100, height: 2)
+                        RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.white.opacity(0.8))
+                                .frame(width: 80, height: 2)
+                    }
                 }
                 Spacer()
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(screens, id: \.self) { screen in
-                        VStack {
-                            view(for: screen)
-                                .frame(height: 120)
-                            Spacer().frame(height: 20)
-                            Text("< \(screen) >")
-                                .font(.system(.body, design: .monospaced))
-                                .foregroundColor(.gray)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.gray.opacity(0.05))
-                                )
-                            Spacer().frame(height: 20)
-                        }
-                        
+                    ForEach(Destination.allCases, id: \.self) { destination in
+                        Button(action: {
+                            path.append(destination)
+                        }, label: {
+                            VStack {
+                                view(for: destination)
+                                    .frame(height: 120)
+                                Spacer().frame(height: 20)
+                                Text("< \(String(describing: destination)) >")
+                                    .font(.system(.body, design: .monospaced))
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.gray.opacity(0.05))
+                                    )
+                                Spacer().frame(height: 20)
+                            }
+                        })
                     }
                     .frame(maxWidth: .infinity)
                     .background(
@@ -296,9 +310,21 @@ struct DashboardView: View {
                 .padding()
             }
         }
+        .navigationDestination(for: Destination.self) {
+            switch $0 {
+            case .stats: StatsView()
+            case .money: MoneyView()
+            case .media: MediaView()
+            case .draft: DraftView()
+            }
+        }
     }
 }
 
 #Preview {
-    DashboardView()
+    StatefulPreviewWrapper(NavigationPath()) { path in
+        NavigationStack(path: path) {
+            DashboardView(path: path)
+        }
+    }
 }
