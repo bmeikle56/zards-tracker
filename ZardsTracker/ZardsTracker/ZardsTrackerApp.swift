@@ -13,8 +13,7 @@ struct ZardsTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            //DashboardView(viewModel: viewModel)
-            PlayerStatsView()
+            DashboardView()
         }
     }
 }
