@@ -230,6 +230,26 @@ struct StatsGraphic: View {
     }
 }
 
+struct MonumentGraphic: View {
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .foregroundStyle(Color.gray)
+                .frame(width: 12, height: 12)
+                .offset(x: -21.2, y: -21.2)
+                .rotationEffect(Angle(degrees: 45))
+                .scaleEffect(x: 0.48, y: 0.9)
+            Rectangle()
+                .foregroundStyle(Color.gray)
+                .frame(width: 10, height: 72)
+                .rotation3DEffect(
+                    .degrees(25),
+                    axis: (x: 1, y: 0, z: 0)
+                )
+        }
+    }
+}
+
 struct DashboardView: View {
     private let columns = [
         GridItem(.flexible()),
@@ -240,31 +260,41 @@ struct DashboardView: View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(screens, id: \.self) { screen in
-                    VStack {
-                        view(for: screen)
-                            .frame(height: 120)
-                        Spacer().frame(height: 20)
-                        Text("< \(screen) >")
-                            .font(.system(.body, design: .monospaced))
-                            .foregroundColor(.gray)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color.gray.opacity(0.05))
-                            )
-                        Spacer().frame(height: 20)
-                    }
-                    
+            VStack {
+                Spacer()
+                HStack {
+                    MonumentGraphic()
+                    Text("ZardsTracker")
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundColor(.gray)
                 }
-                .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.gray.opacity(0.08))
+                Spacer()
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(screens, id: \.self) { screen in
+                        VStack {
+                            view(for: screen)
+                                .frame(height: 120)
+                            Spacer().frame(height: 20)
+                            Text("< \(screen) >")
+                                .font(.system(.body, design: .monospaced))
+                                .foregroundColor(.gray)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.gray.opacity(0.05))
+                                )
+                            Spacer().frame(height: 20)
+                        }
+                        
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.gray.opacity(0.08))
                     )
+                }
+                .padding()
             }
-            .padding()
         }
     }
 }
