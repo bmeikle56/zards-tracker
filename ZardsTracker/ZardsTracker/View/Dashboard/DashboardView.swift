@@ -251,14 +251,17 @@ struct MonumentGraphic: View {
     }
 }
 
+// gold:
+//RoundedRectangle(cornerRadius: 2)
+//    .fill(Color(cgColor: CGColor(red: 183/255, green: 135/255, blue: 0/255, alpha: 0.8)))
+//    .frame(width: 80, height: 2)
+
 struct DashboardView: View {
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
-    //@State private var destination: Destination? = nil
-    
+
     @Binding var path: NavigationPath
     
     var body: some View {
@@ -269,9 +272,20 @@ struct DashboardView: View {
                 Spacer()
                 HStack(spacing: 30) {
                     MonumentGraphic()
-                    Text("Zards Tracker")
-                        .font(.system(.body, design: .monospaced))
-                        .foregroundColor(.gray)
+                    VStack(alignment: .leading) {
+                        Text("Zards Tracker")
+                            .font(.system(.body, design: .monospaced, weight: .heavy))
+                            .foregroundColor(.gray)
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.red.opacity(0.8))
+                                .frame(width: 120, height: 2)
+                        RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.blue.opacity(0.8))
+                                .frame(width: 100, height: 2)
+                        RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.white.opacity(0.8))
+                                .frame(width: 80, height: 2)
+                    }
                 }
                 Spacer()
                 LazyVGrid(columns: columns, spacing: 20) {
