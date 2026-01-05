@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 @ViewBuilder
 func view(for screen: String) -> some View {
@@ -256,36 +257,43 @@ struct DashboardView: View {
         GridItem(.flexible())
     ]
     
+    //@State private var destination: Destination? = nil
+    
+    @Binding var path: NavigationPath
+    
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
             VStack {
                 Spacer()
-                HStack {
+                HStack(spacing: 30) {
                     MonumentGraphic()
-                    Text("ZardsTracker")
+                    Text("Zards Tracker")
                         .font(.system(.body, design: .monospaced))
                         .foregroundColor(.gray)
                 }
                 Spacer()
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(screens, id: \.self) { screen in
-                        VStack {
-                            view(for: screen)
-                                .frame(height: 120)
-                            Spacer().frame(height: 20)
-                            Text("< \(screen) >")
-                                .font(.system(.body, design: .monospaced))
-                                .foregroundColor(.gray)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.gray.opacity(0.05))
-                                )
-                            Spacer().frame(height: 20)
-                        }
-                        
+                        Button(action: {
+                            path.append(Destination.playerStats)
+                        }, label: {
+                            VStack {
+                                view(for: screen)
+                                    .frame(height: 120)
+                                Spacer().frame(height: 20)
+                                Text("< \(screen) >")
+                                    .font(.system(.body, design: .monospaced))
+                                    .foregroundColor(.gray)
+                                    .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.gray.opacity(0.05))
+                                    )
+                                Spacer().frame(height: 20)
+                            }
+                        })
                     }
                     .frame(maxWidth: .infinity)
                     .background(
@@ -296,9 +304,19 @@ struct DashboardView: View {
                 .padding()
             }
         }
+        .navigationDestination(for: Destination.self) {
+            switch $0 {
+            case .playerStats:
+                PlayerStatsView()
+            }
+        }
     }
 }
 
 #Preview {
-    DashboardView()
+    StatefulPreviewWrapper(NavigationPath()) { path in
+        NavigationStack(path: path) {
+            DashboardView(path: path)
+        }
+    }
 }
