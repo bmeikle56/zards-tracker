@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct ZardsTrackerApp: App {
+    @StateObject var viewModel = ZardsViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //DashboardView(viewModel: viewModel)
+            PlayerStatsView()
         }
     }
 }
