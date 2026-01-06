@@ -260,6 +260,7 @@ struct DashboardView: View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
+            Wallpaper()
             VStack {
                 Spacer()
                 HStack(spacing: 30) {
@@ -279,6 +280,11 @@ struct DashboardView: View {
                                 .frame(width: 80, height: 2)
                     }
                 }
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.black)
+                )
                 Spacer()
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(Destination.allCases, id: \.self) { destination in
@@ -304,7 +310,7 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.gray.opacity(0.08))
+                            .fill(Color.black)
                     )
                 }
                 .padding()
