@@ -36,21 +36,49 @@ struct DraftView: View {
                 .ignoresSafeArea()
             Wallpaper()
             HStack {
-                Spacer().frame(width: 100)
-                VStack(alignment: .leading) {
-                    ForEach(bottomFour, id: \.name) { team in
-                        Text("< \(team.name) >")
+                Spacer().frame(width: 60)
+                VStack(alignment: .center) {
+                    Text("Lottery Odds")
+                        .font(.system(.body, design: .monospaced))
+                        .foregroundColor(.white)
+                    HStack {
+                        Text("<1/>")
                             .font(.system(.body, design: .monospaced))
                             .foregroundColor(.white)
                             .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(team.color)
-                            )
+                        Gauge(value: 0.125, label: {
+                            EmptyView()
+                        })
+                        .tint(.red)
                     }
+                    HStack {
+                        Text("<2..4/>")
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundColor(.white)
+                            .padding()
+                        Gauge(value: 0.356, label: {
+                            EmptyView()
+                        })
+                        .tint(.orange)
+                    }
+                    HStack {
+                        Text("<5..8/>")
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundColor(.white)
+                            .padding()
+                        Gauge(value: 0.519, label: {
+                            EmptyView()
+                        })
+                        .tint(.green)
+                    }
+                    
                 }
-                Spacer().frame(width: 100)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.black)
+                )
+                Spacer().frame(width: 60)
             }
         }
     }
